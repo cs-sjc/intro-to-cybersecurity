@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CS Day | Save the Net</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #05060a;
+      --neon: #00eaff;
+      --accent: #7c7cff;
+      --card: #0d1020;
+      --text: #e6f1ff;
+      --muted: #9aa4c7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background: radial-gradient(circle at top, #0b0f2a, var(--bg));
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* Animated background grid */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        linear-gradient(rgba(0,234,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,234,255,0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: -1;
+      animation: gridMove 20s linear infinite;
+    }
+
+    @keyframes gridMove {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    header {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    /* Shield graphic */
+    .shield-graphic {
+      width: 120px;
+      height: 140px;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .shield-graphic svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 20px rgba(0,234,255,0.5));
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    header h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 800;
+      color: var(--neon);
+      text-shadow: 0 0 20px rgba(0,234,255,0.6), 0 0 40px rgba(0,234,255,0.3);
+      margin-bottom: 1.5rem;
+      letter-spacing: 3px;
+    }
+
+    header p {
+      max-width: 750px;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.8;
+    }
+
+    .cta {
+      margin-top: 2.5rem;
+      padding: 1rem 2.5rem;
+      border: 2px solid var(--neon);
+      color: var(--neon);
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: var(--neon);
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease;
+      z-index: -1;
+    }
+
+    .cta:hover::before {
+      width: 100%;
+      height: 100%;
+    }
+
+    .cta:hover {
+      color: #000;
+      box-shadow: 0 0 25px var(--neon);
+    }
+
+    section {
+      padding: 5rem 8vw;
+      position: relative;
+    }
+
+    section h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 700;
+      margin-bottom: 3rem;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(124,124,255,0.4);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #0c1030, var(--card));
+      border: 1px solid rgba(124,124,255,0.3);
+      padding: 2rem;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: 180px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(0,234,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--neon);
+      box-shadow: 0 10px 30px rgba(0,234,255,0.2);
+    }
+
+    .card h3 {
+      color: var(--neon);
+      margin-bottom: 1rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.4rem);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-icon {
+      font-size: 1.5rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+      line-height: 1.7;
+    }
+
+    /* Expanded card styles */
+    .card.expanded {
+      grid-column: 1 / -1;
+      min-height: auto;
+      transform: scale(1.02);
+      border-color: var(--neon);
+      box-shadow: 0 15px 50px rgba(0,234,255,0.3);
+    }
+
+    .card-short {
+      display: block;
+    }
+
+    .card-expanded {
+      display: none;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(124,124,255,0.3);
+    }
+
+    .card.expanded .card-short {
+      display: none;
+    }
+
+    .card.expanded .card-expanded {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-expanded h4 {
+      color: var(--accent);
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.7rem;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .card-expanded ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .card-expanded li {
+      padding-left: 1.5rem;
+      margin-bottom: 0.8rem;
+      position: relative;
+    }
+
+    .card-expanded li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--neon);
+    }
+
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+
+    .expand-hint::before {
+      content: "›";
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .card.expanded .expand-hint {
+      display: none;
+    }
+
+    .game-box {
+      border: 3px solid var(--accent);
+      padding: 3rem;
+      text-align: center;
+      border-radius: 20px;
+      background: linear-gradient(145deg, rgba(124,124,255,0.08), rgba(0,234,255,0.05));
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-box::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(0,234,255,0.1), transparent);
+      animation: rotate 4s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .game-box-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-box h3 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      color: var(--neon);
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .game-box p {
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .game-button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(135deg, var(--accent), var(--neon));
+      color: #000;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 20px rgba(0,234,255,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-button::before {
+      content: "🎮";
+      margin-right: 10px;
+      font-size: 1.3rem;
+    }
+
+    .game-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0,234,255,0.5);
+    }
+
+    .game-button:active {
+      transform: translateY(-1px);
+    }
+
+    /* Warning box for important security tips */
+    .warning-box {
+      background: rgba(255,100,100,0.1);
+      border-left: 4px solid #ff6464;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      border-radius: 8px;
+    }
+
+    .warning-box h4 {
+      color: #ff6464;
+      font-family: 'Orbitron', sans-serif;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      padding: 3rem 8vw;
+      background: #050714;
+      color: var(--muted);
+      font-size: 0.95rem;
+      text-align: center;
+    }
+
+    footer span {
+      color: var(--neon);
+      font-weight: 600;
+    }
+
+    /* Cyber threat icons */
+    .threat-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1rem;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 768px) {
+      section {
+        padding: 3rem 5vw;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card.expanded {
+        grid-column: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="shield-graphic">
+      <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#00eaff;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#7c7cff;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <path d="M50 5 L90 20 L90 50 Q90 85 50 115 Q10 85 10 50 L10 20 Z"
+              fill="none" stroke="url(#shieldGrad)" stroke-width="3"/>
+        <path d="M50 25 L70 35 L70 55 Q70 75 50 95 Q30 75 30 55 L30 35 Z"
+              fill="url(#shieldGrad)" opacity="0.3"/>
+        <path d="M40 55 L47 65 L65 45"
+              fill="none" stroke="#00eaff" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>CS: INTRO TO CYBERSECURITY</h1>
+    <p>Welcome to the digital battlefield where knowledge is your ultimate defense. Master the fundamentals of cybersecurity and become a guardian of the digital realm. Learn to identify threats, protect your data, and defend against the evolving landscape of cyberattacks.</p>
+    <a href="#about" class="cta">ENTER THE GRID</a>
+  </header>
+
+  <section id="about">
+    <h2>What Is Cybersecurity?</h2>
+    <div class="grid">
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Definition</h3>
+        <div class="card-short">
+          <p>Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks designed to access, change, or destroy sensitive information.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Cybersecurity encompasses all technologies, processes, and practices designed to protect networks, devices, programs, and data from attack, damage, or unauthorized access. It's a critical component of modern life as our world becomes increasingly connected.</p>
+
+          <h4>Key Components:</h4>
+          <ul>
+            <li><strong>Network Security:</strong> Protecting computer networks from intruders, whether targeted attackers or opportunistic malware</li>
+            <li><strong>Application Security:</strong> Keeping software and devices free of threats through secure coding and regular updates</li>
+            <li><strong>Information Security:</strong> Protecting data integrity and privacy, both in storage and in transit</li>
+            <li><strong>Operational Security:</strong> Managing data access permissions and the processes for storing or sharing data</li>
+            <li><strong>Disaster Recovery:</strong> Planning how an organization responds to cyber-security incidents and maintains operations</li>
+          </ul>
+
+          <h4>Why It's Growing:</h4>
+          <p>With over 5 billion internet users worldwide and businesses storing massive amounts of sensitive data online, cybersecurity has become a multi-billion dollar industry. New attack methods emerge daily, requiring constant vigilance and adaptation.</p>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Cyberattacks</h3>
+        <div class="card-short">
+          <p>Malicious attempts to breach systems for financial gain, data theft, ransomware attacks, or to disrupt normal operations.</p>
+        </div>
+        <div class="card-expanded">
+          <p>A cyberattack is an intentional exploitation of computer systems, networks, and technology-dependent enterprises. Cyberattacks use malicious code to alter computer code, logic, or data, resulting in disruptive consequences.</p>
+
+          <h4>Common Motivations:</h4>
+          <ul>
+            <li><strong>Financial Gain:</strong> The most common reason - stealing credit card data, banking credentials, or demanding ransom payments</li>
+            <li><strong>Corporate Espionage:</strong> Stealing trade secrets, intellectual property, or competitive intelligence from rival companies</li>
+            <li><strong>Political Activism:</strong> "Hacktivists" attack organizations to promote political agendas or social causes</li>
+            <li><strong>Cyber Warfare:</strong> Nation-states attacking critical infrastructure of other countries</li>
+            <li><strong>Personal Vendetta:</strong> Disgruntled employees or individuals seeking revenge</li>
+          </ul>
+
+          <h4>Scale of the Problem:</h4>
+          <p>Global cybercrime damages are projected to exceed $10.5 trillion annually by 2025. A cyberattack occurs somewhere in the world every 39 seconds, affecting one in three Americans each year.</p>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Why It Matters</h2>
+    <div class="grid">
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Protect Your Identity</h3>
+        <div class="card-short">
+          <p>Cyber attacks can lead to identity theft, extortion, and loss of personal data like photos and files.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Your digital identity is as valuable as your physical identity. When compromised, the consequences can be devastating and long-lasting, affecting your financial stability, reputation, and personal security.</p>
+
+          <h4>Personal Data at Risk:</h4>
+          <ul>
+            <li><strong>Financial Information:</strong> Credit card numbers, bank accounts, Social Security numbers, and tax records</li>
+            <li><strong>Personal Records:</strong> Medical history, employment records, educational transcripts</li>
+            <li><strong>Digital Assets:</strong> Photos, videos, documents, cryptocurrency wallets</li>
+            <li><strong>Online Accounts:</strong> Email, social media, shopping accounts with saved payment methods</li>
+            <li><strong>Personal Communications:</strong> Private messages, emails, and sensitive conversations</li>
+          </ul>
+
+          <h4>Real Consequences:</h4>
+          <ul>
+            <li>Identity theft victims spend an average of 200+ hours recovering their identity</li>
+            <li>Fraudulent charges and unauthorized loans can destroy credit scores</li>
+            <li>Personal photos and information can be used for blackmail or harassment</li>
+            <li>Lost cryptocurrency can never be recovered</li>
+            <li>Reputation damage from compromised social media accounts</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Protect Society</h3>
+        <div class="card-short">
+          <p>Hospitals, power plants, and financial systems depend on strong cybersecurity to keep society running.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Cybersecurity isn't just about protecting individuals - it's essential for maintaining the critical infrastructure that modern society depends on. A single successful attack on critical systems can affect millions of people.</p>
+
+          <h4>Critical Infrastructure at Risk:</h4>
+          <ul>
+            <li><strong>Healthcare Systems:</strong> Hospital networks, patient records, life-support systems, and medical device controls</li>
+            <li><strong>Energy Grid:</strong> Power plants, electrical distribution systems, oil and gas pipelines</li>
+            <li><strong>Financial Systems:</strong> Banks, stock exchanges, payment processors, and ATM networks</li>
+            <li><strong>Transportation:</strong> Air traffic control, railway systems, traffic management</li>
+            <li><strong>Water Treatment:</strong> Water purification and distribution systems</li>
+            <li><strong>Communications:</strong> Phone networks, internet backbone, emergency services</li>
+          </ul>
+
+          <h4>Historical Examples:</h4>
+          <ul>
+            <li>The Colonial Pipeline ransomware attack (2021) disrupted fuel supply across the US East Coast</li>
+            <li>WannaCry ransomware (2017) affected healthcare systems in 150 countries</li>
+            <li>Ukraine power grid attacks (2015, 2016) left hundreds of thousands without electricity</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Common Cyber Threats</h2>
+    <div class="grid">
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Malware</h3>
+        <div class="card-short">
+          <p>Malicious software designed to damage systems, steal data, or gain unauthorized access to networks.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Malware (malicious software) is any program or file intentionally designed to harm a computer, network, or server. It's one of the oldest and most common cyber threats.</p>
+
+          <h4>Types of Malware:</h4>
+          <ul>
+            <li><strong>Viruses:</strong> Attach to legitimate programs and spread when the program runs</li>
+            <li><strong>Trojans:</strong> Disguise themselves as legitimate software to trick users into installing them</li>
+            <li><strong>Spyware:</strong> Secretly monitors user activity and steals sensitive information</li>
+            <li><strong>Adware:</strong> Forces unwanted advertisements and can track browsing behavior</li>
+            <li><strong>Rootkits:</strong> Provide unauthorized remote access while hiding from detection</li>
+            <li><strong>Keyloggers:</strong> Record every keystroke to capture passwords and sensitive data</li>
+          </ul>
+
+          <h4>How It Spreads:</h4>
+          <ul>
+            <li>Email attachments from unknown senders</li>
+            <li>Infected USB drives or external devices</li>
+            <li>Malicious downloads from untrusted websites</li>
+            <li>Compromised software updates</li>
+            <li>Drive-by downloads from infected websites</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Ransomware</h3>
+        <div class="card-short">
+          <p>Locks your files and demands payment. Paying does not guarantee recovery and funds criminal organizations.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Ransomware is a type of malware that encrypts your files or locks your computer, then demands payment (usually in cryptocurrency) to restore access. It's one of the fastest-growing cyber threats.</p>
+
+          <h4>How Ransomware Works:</h4>
+          <ul>
+            <li><strong>Infection:</strong> Usually enters through phishing emails, malicious downloads, or software vulnerabilities</li>
+            <li><strong>Encryption:</strong> Silently encrypts files across the system, making them inaccessible</li>
+            <li><strong>Ransom Demand:</strong> Displays a message demanding payment (often $500-$5000+) within a time limit</li>
+            <li><strong>Threat Escalation:</strong> May threaten to delete files or increase ransom if not paid quickly</li>
+          </ul>
+
+          <div class="warning-box">
+            <h4>⚠️ NEVER Pay the Ransom!</h4>
+            <p>Only 65% of victims who pay actually get their data back. Payment funds criminal organizations and marks you as a willing target for future attacks. Instead, report to authorities and seek professional help.</p>
+          </div>
+
+          <h4>Protection Strategies:</h4>
+          <ul>
+            <li>Regular backups stored offline or in secure cloud storage</li>
+            <li>Keep all software and operating systems updated</li>
+            <li>Use robust antivirus with real-time protection</li>
+            <li>Be extremely cautious with email attachments</li>
+            <li>Implement least-privilege access controls</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Phishing</h3>
+        <div class="card-short">
+          <p>Fake emails or messages pretending to be from trusted sources to steal passwords, credit card numbers, and personal information.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Phishing is a social engineering attack where attackers pose as legitimate organizations to trick victims into revealing sensitive information. It's the most common initial attack vector for data breaches.</p>
+
+          <h4>Types of Phishing:</h4>
+          <ul>
+            <li><strong>Email Phishing:</strong> Mass emails pretending to be from banks, companies, or government agencies</li>
+            <li><strong>Spear Phishing:</strong> Targeted attacks using personalized information about specific victims</li>
+            <li><strong>Whaling:</strong> Attacks targeting high-level executives (CEOs, CFOs)</li>
+            <li><strong>Smishing:</strong> Phishing via SMS text messages</li>
+            <li><strong>Vishing:</strong> Voice phishing using phone calls</li>
+            <li><strong>Clone Phishing:</strong> Copying legitimate emails and replacing links with malicious ones</li>
+          </ul>
+
+          <h4>Red Flags to Watch For:</h4>
+          <ul>
+            <li>Urgent language demanding immediate action</li>
+            <li>Requests for passwords, SSN, or financial information</li>
+            <li>Suspicious sender addresses (check carefully!)</li>
+            <li>Generic greetings like "Dear Customer"</li>
+            <li>Spelling and grammar errors</li>
+            <li>Mismatched or suspicious URLs (hover before clicking)</li>
+            <li>Unexpected attachments or download requests</li>
+          </ul>
+
+          <h4>What To Do:</h4>
+          <ul>
+            <li>Never click links in suspicious emails</li>
+            <li>Go directly to official websites by typing the URL</li>
+            <li>Verify requests through official channels</li>
+            <li>Report phishing attempts to the impersonated organization</li>
+            <li>Use email filters and security software</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Defend Your Digital Castle</h2>
+    <div class="grid">
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Strong Passwords</h3>
+        <div class="card-short">
+          <p>Use unique, complex passwords for every account to prevent unauthorized access.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Passwords are your first line of defense. Weak or reused passwords are like leaving your front door unlocked - it's an invitation for attackers.</p>
+
+          <h4>Password Best Practices:</h4>
+          <ul>
+            <li><strong>Length Matters:</strong> Use at least 12-16 characters (longer is better)</li>
+            <li><strong>Complexity:</strong> Mix uppercase, lowercase, numbers, and special characters</li>
+            <li><strong>Uniqueness:</strong> Never reuse passwords across different accounts</li>
+            <li><strong>Unpredictability:</strong> Avoid personal information, dictionary words, or common patterns</li>
+            <li><strong>Passphrases:</strong> Consider using memorable phrases like "Purple!Elephants7Dance@Midnight"</li>
+          </ul>
+
+          <h4>What NOT To Do:</h4>
+          <ul>
+            <li>Don't use "password," "123456," or other common passwords</li>
+            <li>Don't include your name, birthday, or pet's name</li>
+            <li>Don't write passwords on sticky notes or in plain text files</li>
+            <li>Don't share passwords via email or text</li>
+            <li>Don't use the same password for email and banking</li>
+          </ul>
+
+          <h4>Password Manager Solution:</h4>
+          <p>Use a reputable password manager (LastPass, 1Password, Bitwarden) to generate and securely store unique passwords for every account. You only need to remember one master password!</p>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Multi-Factor Authentication</h3>
+        <div class="card-short">
+          <p>Add an extra layer of security beyond passwords with two-factor or multi-factor authentication.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Multi-Factor Authentication (MFA) requires two or more verification methods, making it much harder for attackers to access your accounts even if they have your password.</p>
+
+          <h4>Authentication Factors:</h4>
+          <ul>
+            <li><strong>Something You Know:</strong> Password, PIN, or security question</li>
+            <li><strong>Something You Have:</strong> Phone, security key, smart card, or authentication app</li>
+            <li><strong>Something You Are:</strong> Fingerprint, facial recognition, or voice recognition</li>
+          </ul>
+
+          <h4>MFA Methods (Best to Worst):</h4>
+          <ul>
+            <li><strong>Hardware Security Keys:</strong> Physical devices (YubiKey) - most secure</li>
+            <li><strong>Authentication Apps:</strong> Google Authenticator, Authy - very secure</li>
+            <li><strong>Biometrics:</strong> Fingerprint/face ID - convenient and secure</li>
+            <li><strong>SMS Codes:</strong> Text message codes - better than nothing but vulnerable to SIM swapping</li>
+          </ul>
+
+          <h4>Why It's Critical:</h4>
+          <p>MFA blocks 99.9% of automated attacks. Even if hackers steal your password in a data breach, they can't access your account without the second factor. Enable it on ALL important accounts: email, banking, social media, work accounts.</p>
+
+          <h4>Where to Enable MFA:</h4>
+          <ul>
+            <li>Email accounts (Gmail, Outlook, etc.)</li>
+            <li>Banking and financial services</li>
+            <li>Social media platforms</li>
+            <li>Cloud storage (Google Drive, Dropbox, iCloud)</li>
+            <li>Work and school accounts</li>
+            <li>Shopping sites with saved payment info</li>
+          </ul>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+
+      <div class="card" onclick="toggleCard(this)">
+        <h3>Updates & Antivirus</h3>
+        <div class="card-short">
+          <p>Regular updates patch security vulnerabilities and antivirus software blocks known threats.</p>
+        </div>
+        <div class="card-expanded">
+          <p>Keeping your software updated and running reliable security software are essential defensive measures that protect against both known and emerging threats.</p>
+
+          <h4>Why Updates Matter:</h4>
+          <ul>
+            <li><strong>Security Patches:</strong> Fix newly discovered vulnerabilities before attackers exploit them</li>
+            <li><strong>Bug Fixes:</strong> Resolve issues that could be leveraged for attacks</li>
+            <li><strong>New Protections:</strong> Add defenses against latest threat techniques</li>
+            <li><strong>Compliance:</strong> Meet security standards and requirements</li>
+          </ul>
+
+          <h4>What to Keep Updated:</h4>
+          <ul>
+            <li>Operating System (Windows, macOS, iOS, Android)</li>
+            <li>Web browsers (Chrome, Firefox, Safari, Edge)</li>
+            <li>Applications and programs you use regularly</li>
+            <li>Antivirus and security software</li>
+            <li>Router firmware</li>
+            <li>Mobile apps</li>
+          </ul>
+
+          <h4>Antivirus Protection:</h4>
+          <ul>
+            <li><strong>Real-Time Scanning:</strong> Monitors files and programs as you use them</li>
+            <li><strong>Threat Detection:</strong> Identifies malware based on signatures and behavior</li>
+            <li><strong>Web Protection:</strong> Blocks malicious websites and downloads</li>
+            <li><strong>Email Scanning:</strong> Filters dangerous attachments and links</li>
+            <li><strong>Firewall:</strong> Controls incoming and outgoing network traffic</li>
+          </ul>
+
+          <h4>Recommended Practices:</h4>
+          <ul>
+            <li>Enable automatic updates whenever possible</li>
+            <li>Restart devices after updates to ensure patches are applied</li>
+            <li>Use built-in security tools (Windows Defender is quite good)</li>
+            <li>Consider additional protection for high-risk activities</li>
+            <li>Keep antivirus definitions up to date</li>
+            <li>Run regular full system scans</li>
+          </ul>
+
+          <div class="warning-box">
+            <h4>⚠️ Don't Ignore Update Notifications!</h4>
+            <p>Many major breaches exploit known vulnerabilities that already have available patches. The WannaCry ransomware attack affected over 200,000 computers running outdated Windows versions, despite a patch being available for months.</p>
+          </div>
+        </div>
+        <div class="expand-hint">Click to learn more</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cyber Games & Challenges</h2>
+    <div class="game-box">
+      <div class="game-box-content">
+        <h3>Test Your Skills & Fight Cybercrime!</h3>
+        <p>Ready to put your cybersecurity knowledge to the test? Enter the digital battlefield where you'll face waves of cyber threats, defend virtual networks, and prove you have what it takes to be a cyber defender.</p>
+        <p><strong>Choose your challenge:</strong> Identify phishing emails, crack password security puzzles, defend against malware attacks, and navigate through complex security scenarios. Each level gets harder as you progress!</p>
+        <p><em>Defend the castle! Pick up your armor, grab your cursor, and battle through countless challenges in the ultimate cyber invasion experience!</em></p>
+        <a href="game.html" class="game-button">PLAY NOW</a>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--muted);">Tip: Complete the lessons above before playing for maximum cyber-defense skills!</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><span>CS: SAFE INTERNET DAY</span> | Cybersecurity Basics for Students</p>
+    <p style="margin-top: 1rem; font-size: 0.85rem;">Stay safe online. Stay informed. Stay protected.</p>
+  </footer>
+
+  <script>
+    function toggleCard(card) {
+      // Close all other expanded cards
+      const allCards = document.querySelectorAll('.card.expanded');
+      allCards.forEach(c => {
+        if (c !== card) {
+          c.classList.remove('expanded');
+        }
+      });
+
+      // Toggle this card
+      card.classList.toggle('expanded');
+
+      // Smooth scroll to card if expanding
+      if (card.classList.contains('expanded')) {
+        setTimeout(() => {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      }
+    }
+
+    // Smooth scroll for CTA button
+    document.querySelector('.cta').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.querySelector('#about').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+
+</body>
+</html>
